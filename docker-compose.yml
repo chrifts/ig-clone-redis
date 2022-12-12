@@ -1,19 +1,24 @@
 version: '3.9'
   
-services:    
+services:
   redis:
     container_name: redis
     hostname: redis
     image: redis
+    volumes:
+      - ./data:/data
     ports:
       - "6397:6397"
-      
-  redis-commander:
-    container_name: redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    restart: always
-    environment:
-      - REDIS_HOSTS=local:redis:6379
+    networks:
+      - mynetwork
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
     ports:
-      - "8081:8081"
+      - '8001:8001'
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    name: mynetwork
